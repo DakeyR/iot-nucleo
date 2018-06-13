@@ -12,7 +12,7 @@ Serial pc(SERIAL_TX, SERIAL_RX);
 
 DigitalOut myled(LED1);
 
-//DHT sensor(A0,SEN11301P);
+DHT sensor(D9, DHT11);
 
 void dist(int distance)
 {
@@ -26,25 +26,25 @@ ultrasonic mu(D12, D11, .1, 1, &dist);    //Set the trigger pin to D12 and the e
  
 int main()
 {
- //   int temp = 0;
- //   int humid = 0;
+    int temp = 0;
+    int humid = 0;
     mu.startUpdates();//start mesuring the distance
     while(1) {
         wait(10);
         mu.checkDistance();     //call checkDistance() as much as possible, as this is where
-  /*      int err = sensor.readData();
+        int err = sensor.readData();
         if (err == 0) {
             temp = (int) sensor.ReadTemperature(CELCIUS);
             humid = (int) sensor.ReadHumidity();
-            sigfox.printf("AT$SS=%02x %02x\n", temp, humid);
-            pc.printf("AT$SS=%02x %02x\r\n", temp, humid);
+            //sigfox.printf("AT$SS=%02x %02x\n", temp, humid);
+            pc.printf("temp: %d, humid: %d (AT$SS=%02x %02x\r)\r\n", temp, humid, temp, humid);
             myled = 0;
         }
         else {
             myled = 1;
-            pc.printf("Error when reading temperature/humidity\r\n");
+            pc.printf("Error when reading temperature/humidity: %d\r\n", err);
         }
-        */
+        
 
         //wait(60);
 
