@@ -1,6 +1,7 @@
 #include "mbed.h"
 #include "DHT.h"
 #include "ultrasonic.h"
+#include "TSL2591.h"
 
 //------------------------------------
 // Hyperterminal configuration
@@ -13,6 +14,10 @@ Serial pc(SERIAL_TX, SERIAL_RX);
 DigitalOut myled(LED1);
 
 DHT sensor(D9, DHT11);
+
+I2C i2c1(I2C_SDA, I2C_SCL);
+TSL2591 light(i2c1, TSL2591_ADDR);
+
 
 void dist(int distance)
 {
@@ -30,6 +35,10 @@ int main()
     int humid = 0;
     mu.startUpdates();//start mesuring the distance
     while(1) {
+        light.getALS();
+        light.calcLux();
+
+        pc.printf("%d \t %d \t %d \t %d\n",light.full,light.ir,(int16_t)light.visible,light.lux);
         wait(10);
         mu.checkDistance();     //call checkDistance() as much as possible, as this is where
         int err = sensor.readData();
