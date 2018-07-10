@@ -38,15 +38,16 @@ int main()
         light.getALS();
         light.calcLux();
 
-        pc.printf("%d \t %d \t %d \t %d\n",light.full,light.ir,(int16_t)light.visible,light.lux);
+        pc.printf("light.full: %d \t light.ir: %d \t light.visible: %d \t light.lux: %d\n",light.full,light.ir,(int16_t)light.visible,light.lux);
         wait(10);
         mu.checkDistance();     //call checkDistance() as much as possible, as this is where
         int err = sensor.readData();
         if (err == 0) {
             temp = (int) sensor.ReadTemperature(CELCIUS);
             humid = (int) sensor.ReadHumidity();
-            //sigfox.printf("AT$SS=%02x %02x\n", temp, humid);
-            pc.printf("temp: %d, humid: %d (AT$SS=%02x %02x\r)\r\n", temp, humid, temp, humid);
+            sigfox.printf("AT$SS=%02x %02x %04x %02x\n", temp, humid, light.visible, mu.getCurrentDistance());
+            pc.printf("AT$SS=%02x %02x %04x %02x\n", temp, humid, light.visible, mu.getCurrentDistance());
+            pc.printf("temp: %d, humid: %d \r\n", temp, humid);
             myled = 0;
         }
         else {
